@@ -29,7 +29,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section className="mx-auto max-w-6xl px-0 py-2">
+    <section className="w-full px-4 py-2 sm:px-6">
       <div className="mb-4">
         <p className="text-xs font-bold uppercase tracking-wider text-krishna-primary/70">
           {language === "en" ? "Why Bhagvad Chat" : "क्यों भगवद चैट"}
@@ -45,7 +45,7 @@ export default function AboutSection() {
             className="rounded-3xl border border-blue-100 bg-white p-6 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
           >
             <h3 className="text-lg font-extrabold text-krishna-primary">{item.title}</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-700">{item.description}</p>
+            <p className="mt-3 text-sm leading-6 text-krishna-primary">{item.description}</p>
           </div>
         ))}
       </div>

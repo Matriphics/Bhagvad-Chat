@@ -4,95 +4,173 @@ import ChatBubble from "@/components/ChatBubble";
 import ChatInput from "@/components/ChatInput";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Menu } from "lucide-react";
 
 type Msg = { id: number; role: "user" | "ai"; text: string };
-
-const replies: Record<"en" | "hi", string[]> = {
-  en: [
-    "Krishna teaches steady action without attachment to outcomes. Focus on effort with a calm mind.",
-    "Karma is conscious action aligned with dharma—do your duty, and surrender the result.",
-    "When anger rises, pause, breathe, and return to clarity. Discipline of the mind is the path to peace.",
-  ],
-  hi: [
-    "कृष्ण सिखाते हैं कि फल की आसक्ति छोड़कर कर्म करो। शांत मन से प्रयास पर ध्यान दो।",
-    "कर्म का अर्थ है धर्म के अनुसार जागरूक कार्रवाई—कर्तव्य करो और परिणाम ईश्वर पर छोड़ दो।",
-    "जब क्रोध उठे, ठहरो, श्वास लो और स्पष्टता में लौटो। मन का अनुशासन ही शांति का मार्ग है।",
-  ],
-};
-
-const promptChips: Record<"en" | "hi", string[]> = {
-  en: ["How to deal with anxiety?", "What is karma?", "How to control anger?"],
-  hi: ["चिंता से कैसे निपटें?", "कर्म क्या है?", "क्रोध को कैसे नियंत्रित करें?"],
-};
+type Chat = { id: number; title: string; messages: Msg[] };
 
 export default function ChatPage() {
   const { language } = useLanguage();
   const lang = language as "en" | "hi";
 
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [activeChatId, setActiveChatId] = useState<number | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   const endRef = useRef<HTMLDivElement>(null);
+
+  // load from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("bhagvad-chats");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      setChats(parsed);
+      if (parsed.length) setActiveChatId(parsed[0].id);
+    }
+  }, []);
+
+  // persist
+  useEffect(() => {
+    localStorage.setItem("bhagvad-chats", JSON.stringify(chats));
+  }, [chats]);
+
+  const activeChat = chats.find((c) => c.id === activeChatId);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [activeChat?.messages]);
+
+  const createNewChat = () => {
+    const newChat: Chat = {
+      id: Date.now(),
+      title: "New Chat",
+      messages: [],
+    };
+    setChats((prev) => [newChat, ...prev]);
+    setActiveChatId(newChat.id);
+  };
 
   const sendMessage = (text: string) => {
-    setMessages((m) => [...m, { id: Date.now(), role: "user", text }]);
+    if (!activeChat) return;
+
+    const userMsg: Msg = { id: Date.now(), role: "user", text };
+
+    const updatedChats = chats.map((chat) =>
+      chat.id === activeChat.id
+        ? {
+            ...chat,
+            title: chat.messages.length === 0 ? text.slice(0, 20) : chat.title,
+            messages: [...chat.messages, userMsg],
+          }
+        : chat
+    );
+
+    setChats(updatedChats);
+
     setTimeout(() => {
-      const pool = replies[lang];
-      const reply = pool[Math.floor(Math.random() * pool.length)];
-      setMessages((m) => [...m, { id: Date.now() + 1, role: "ai", text: reply }]);
-    }, 750);
+      const aiMsg: Msg = {
+        id: Date.now() + 1,
+        role: "ai",
+        text:
+          lang === "en"
+            ? "Krishna teaches to act without attachment. Focus on your duty."
+            : "कृष्ण सिखाते हैं कि फल की आसक्ति छोड़कर कर्म करो।",
+      };
+
+      setChats((prev) =>
+        prev.map((chat) =>
+          chat.id === activeChat.id
+            ? { ...chat, messages: [...chat.messages, aiMsg] }
+            : chat
+        )
+      );
+    }, 700);
   };
 
   const welcomeTitle = useMemo(
-    () => (lang === "en" ? "Seek Guidance from the Bhagavad Gita" : "भगवद गीता से मार्गदर्शन पाएँ"),
-    [lang],
-  );
-
-  const welcomeSubtitle = useMemo(
-    () => (lang === "en" ? "Ask anything about life, purpose, or dharma" : "जीवन, उद्देश्य या धर्म के बारे में कुछ भी पूछें"),
-    [lang],
+    () =>
+      lang === "en"
+        ? "Seek Guidance from the Bhagavad Gita"
+        : "भगवद गीता से मार्गदर्शन पाएँ",
+    [lang]
   );
 
   return (
-    <section className="mx-auto max-w-3xl font-serif">
-      <div className="rounded-3xl border border-blue-100 bg-white shadow-soft">
-        <div className="border-b border-blue-100 px-6 py-5">
-          <h2 className="text-2xl font-black tracking-tight text-krishna-primary">{lang === "en" ? "Chat" : "चैट"}</h2>
-          <p className="mt-1 text-sm font-semibold text-slate-700">{lang === "en" ? "Ask Krishna..." : "कृष्ण से पूछें..."}</p>
+    <div className="flex h-[100vh]">
+
+      {/* SIDEBAR */}
+      <div
+        className={`${
+          sidebarOpen ? "w-64" : "w-0"
+        } transition-all duration-300 overflow-hidden bg-slate-50 border-r`}
+      >
+        <div className="p-4 flex flex-col h-full">
+          <button
+            onClick={createNewChat}
+            className="mb-4 rounded-lg bg-blue-600 text-white py-2"
+          >
+            + New Chat
+          </button>
+
+          <div className="flex-1 overflow-y-auto space-y-2">
+            {chats.map((chat) => (
+              <div
+                key={chat.id}
+                onClick={() => setActiveChatId(chat.id)}
+                className={`cursor-pointer rounded-lg p-2 text-sm ${
+                  chat.id === activeChatId
+                    ? "bg-blue-100"
+                    : "hover:bg-blue-50"
+                }`}
+              >
+                {chat.title}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN */}
+      <div className="flex flex-col flex-1">
+
+        {/* TOP BAR */}
+        <div className="flex items-center gap-3 border-b p-3">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <Menu />
+          </button>
+          <h2 className="font-semibold">Krishna AI</h2>
         </div>
 
-        {messages.length === 0 ? (
-          <div className="space-y-5 px-6 py-12 text-center">
-            <h3 className="text-4xl font-black tracking-tight text-krishna-primary">{welcomeTitle}</h3>
-            <p className="text-base font-semibold text-slate-700">{welcomeSubtitle}</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {promptChips[lang].map((p) => (
-                <button
-                  key={p}
-                  onClick={() => sendMessage(p)}
-                  className="rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-krishna-primary transition-all duration-200 hover:bg-blue-100"
-                >
-                  {p}
-                </button>
-              ))}
+        {/* CHAT AREA */}
+        {!activeChat || activeChat.messages.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center text-center px-4">
+            <div>
+              <h3 className="text-3xl font-bold text-krishna-primary">
+                {welcomeTitle}
+              </h3>
             </div>
           </div>
         ) : (
-          <div className="h-[62vh] space-y-3 overflow-y-auto px-6 py-6">
-            {messages.map((msg) => (
+          <div className="flex-1 overflow-y-auto p-6 space-y-3">
+            {activeChat.messages.map((msg) => (
               <ChatBubble key={msg.id} role={msg.role} text={msg.text} />
             ))}
             <div ref={endRef} />
           </div>
         )}
-      </div>
 
-      <div className="sticky bottom-3 mt-4">
-        <ChatInput placeholder={lang === "en" ? "Ask Krishna..." : "कृष्ण से पूछें..."} onSend={sendMessage} />
+        {/* INPUT */}
+        <div className="p-4 border-t">
+          <ChatInput
+            placeholder={
+              lang === "en"
+                ? "Ask Krishna..."
+                : "कृष्ण से पूछें..."
+            }
+            onSend={sendMessage}
+          />
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
-

@@ -18,7 +18,7 @@ export default function Navbar() {
     { href: "/daily-shloka", label: { en: "Daily Shloka", hi: "दैनिक श्लोक" } },
   ];
 
-  // lock scroll
+  // Lock scroll when drawer open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
   }, [open]);
@@ -27,12 +27,12 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
 
-        {/* ✅ LOGO FIXED (NOW CLICKABLE) */}
+        {/* LOGO */}
         <Link href="/" className="text-lg font-bold text-blue-600">
           Bhagvad Chat
         </Link>
 
-        {/* DESKTOP */}
+        {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-6">
           {links.map((l) => (
             <Link
@@ -60,67 +60,78 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* MOBILE ICON */}
+        {/* MOBILE MENU BUTTON */}
         <button
           onClick={() => setOpen(true)}
-          className="md:hidden text-blue-600"
+          className="md:hidden text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition"
         >
           <Menu className="h-6 w-6" />
         </button>
       </div>
 
-      {/* ✅ DRAWER FIXED */}
-      {open && (
-        <div className="fixed inset-0 z-[999] md:hidden">
+      {/* ✅ MOBILE DRAWER (FIXED + ANIMATED) */}
+      <div
+        className={`fixed inset-0 z-[999] md:hidden transition-all duration-300 ${
+          open ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
 
-          {/* overlay */}
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setOpen(false)}
-          />
+        {/* OVERLAY */}
+        <div
+          onClick={() => setOpen(false)}
+          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
+        />
 
-          {/* drawer */}
-          <div className="absolute left-0 top-0 h-full w-72 bg-white p-5 shadow-xl z-[1000]">
+        {/* DRAWER */}
+        <div
+          className={`absolute right-0 top-0 h-full w-72 bg-white p-5 shadow-xl z-[1000] transform transition-transform duration-300 ${
+            open ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
 
-            <div className="flex justify-between items-center mb-5">
-              <span className="font-semibold text-blue-600">
-                Bhagvad Chat
-              </span>
+          {/* HEADER */}
+          <div className="flex justify-between items-center mb-5">
+            <span className="font-semibold text-blue-600">
+              Bhagvad Chat
+            </span>
 
-              <button onClick={() => setOpen(false)}>
-                <X className="h-5 w-5 text-blue-600" />
-              </button>
-            </div>
-
-            <nav className="flex flex-col gap-3">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-3 rounded-lg text-slate-700 hover:bg-blue-50"
-                >
-                  {l.label[language]}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="mt-6 border-t pt-4 flex gap-3">
-              <button
-                onClick={toggleLanguage}
-                className="px-3 py-1 border rounded-full text-blue-600"
-              >
-                {language === "en" ? "हिंदी" : "English"}
-              </button>
-
-              <Link href="/settings">
-                <Settings className="h-5 w-5 text-blue-600" />
-              </Link>
-            </div>
-
+            <button onClick={() => setOpen(false)}>
+              <X className="h-5 w-5 text-blue-600" />
+            </button>
           </div>
+
+          {/* LINKS */}
+          <nav className="flex flex-col gap-3">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="px-4 py-3 rounded-lg text-slate-700 hover:bg-blue-50 transition"
+              >
+                {l.label[language]}
+              </Link>
+            ))}
+          </nav>
+
+          {/* FOOTER */}
+          <div className="mt-6 border-t pt-4 flex gap-3">
+            <button
+              onClick={toggleLanguage}
+              className="px-3 py-1 border rounded-full text-blue-600"
+            >
+              {language === "en" ? "हिंदी" : "English"}
+            </button>
+
+            <Link href="/settings" onClick={() => setOpen(false)}>
+              <Settings className="h-5 w-5 text-blue-600" />
+            </Link>
+          </div>
+
         </div>
-      )}
+      </div>
     </header>
   );
 }

@@ -17,7 +17,7 @@ export default function ChapterClient({ chapter, verses }: Props) {
   const chapterSummary = isEnglish ? chapter.summary?.en : chapter.summary?.hi;
 
   return (
-    <section className="mx-auto max-w-5xl space-y-6">
+    <section className="mx-auto max-w-5xl space-y-6 py-16">
       <div className="flex items-center justify-between gap-4">
         <Link href="/chapters" className="text-sm font-medium text-krishna-primary hover:underline">
           ← Back to Chapters
@@ -38,7 +38,7 @@ export default function ChapterClient({ chapter, verses }: Props) {
         </div>
       </div>
 
-      <article className="rounded-3xl border border-blue-100 bg-white p-6 shadow-soft sm:p-8">
+      <article className="rounded-3xl border border-blue-100 bg-white p-6 shadow-soft sm:p-8 text-center">
         <h1 className="text-2xl font-bold tracking-tight text-krishna-primary sm:text-3xl">
           Chapter {chapter.chapter_number}: {chapterTitle || "Bhagavad Gita"}
         </h1>

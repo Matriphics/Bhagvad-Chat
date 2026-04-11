@@ -5,15 +5,15 @@ import MissionSection from "@/components/MissionSection";
 
 export default function HomePage() {
   return (
-    <div className="space-y-8 pb-10 sm:space-y-12">
+    <div className="space-y-0 pb-0">
       <HeroSection />
-      <section className="mx-auto max-w-6xl rounded-3xl border border-blue-100 bg-white/80 p-4 shadow-soft sm:p-6">
+      <section className="w-full bg-sky-50 py-10 sm:py-16">
         <AboutSection />
       </section>
-      <section className="mx-auto max-w-6xl rounded-3xl border border-orange-100 bg-gradient-to-br from-blue-50/70 to-orange-50/70 p-4 shadow-soft sm:p-6">
+      <section className="w-full bg-sky-900 text-white py-10 sm:py-16">
         <MissionSection />
       </section>
-      <section className="mx-auto max-w-6xl rounded-3xl border border-blue-100 bg-white/80 p-4 shadow-soft sm:p-6">
+      <section className="w-full bg-sky-50 py-10 sm:py-16">
         <CardGrid />
       </section>
     </div>

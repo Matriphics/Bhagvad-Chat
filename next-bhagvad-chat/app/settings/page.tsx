@@ -7,7 +7,7 @@ export default function SettingsPage() {
   const [time, setTime] = useState("07:00");
 
   return (
-    <section className="mx-auto max-w-xl space-y-6">
+    <section className="mx-auto max-w-xl space-y-6 px-4 py-10 sm:px-6">
       <h2 className="text-3xl font-bold text-krishna-primary">Settings</h2>
 
       <div className="rounded-3xl border border-blue-100 bg-white p-6 shadow-soft">

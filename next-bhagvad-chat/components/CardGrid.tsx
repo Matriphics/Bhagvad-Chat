@@ -54,7 +54,7 @@ const cards = [
 
 export default function CardGrid() {
   return (
-    <section className="mx-auto max-w-6xl py-2">
+    <section className="w-full px-4 py-2 sm:px-6">
       <div className="mb-6">
         <p className="text-sm font-bold uppercase tracking-wide text-krishna-primary/80">Our Range</p>
         <h2 className="mt-1 text-3xl font-extrabold tracking-tight text-krishna-primary">Explore Divine Companions</h2>

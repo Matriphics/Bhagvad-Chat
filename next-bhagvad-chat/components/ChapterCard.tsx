@@ -9,10 +9,10 @@ export default function ChapterCard({ number, name }: Props) {
   return (
     <Link
       href={`/chapters/${number}`}
-      className="block rounded-2xl border border-blue-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-soft"
+      className="mx-auto block w-full max-w-sm rounded-2xl border border-sky-200 bg-sky-100 p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
     >
-      <p className="text-sm font-semibold text-krishna-accent">Chapter {number}</p>
-      <h3 className="mt-2 text-lg font-semibold text-krishna-primary">{name}</h3>
+      <p className="text-sm font-semibold uppercase tracking-wide text-sky-700">Chapter {number}</p>
+      <h3 className="mt-2 text-base font-semibold text-slate-900">{name}</h3>
     </Link>
   );
 }

@@ -1,7 +1,7 @@
 export default function DailyShlokaPage() {
   return (
-    <section className="mx-auto max-w-3xl space-y-6">
-      <h2 className="text-3xl font-bold text-krishna-primary">Daily Shloka</h2>
+    <section className="mx-auto max-w-3xl space-y-6 px-4 py-10 sm:px-6">
+      <h2 className="text-3xl font-bold text-krishna-primary text-center">Daily Shloka</h2>
       <div className="rounded-3xl border border-blue-100 bg-white p-8 shadow-soft">
         <p className="text-center text-2xl font-semibold text-krishna-primary">
           कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।

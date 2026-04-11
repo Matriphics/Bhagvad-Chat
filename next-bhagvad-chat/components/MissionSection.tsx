@@ -5,8 +5,8 @@ import { useLanguage } from "./LanguageProvider";
 export default function MissionSection() {
   const { language } = useLanguage();
   return (
-    <section className="mx-auto max-w-6xl py-2">
-      <div className="rounded-3xl border border-orange-100 bg-gradient-to-r from-white via-blue-50/60 to-orange-50/70 p-8 shadow-soft">
+    <section className="w-full px-4 py-2 sm:px-6">
+      <div className="rounded-3xl border border-sky-200 bg-sky-100 p-8 shadow-soft">
         <h2 className="text-2xl font-extrabold text-krishna-primary">
           {language === "en" ? "Our Mission" : "हमारा मिशन"}
         </h2>
