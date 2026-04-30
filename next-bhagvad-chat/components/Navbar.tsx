@@ -63,7 +63,8 @@ export default function Navbar() {
         {/* MOBILE MENU BUTTON */}
         <button
           onClick={() => setOpen(true)}
-          className="md:hidden text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition"
+          className="md:hidden text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition relative z-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Toggle menu"
         >
           <Menu className="h-6 w-6" />
         </button>
@@ -71,7 +72,7 @@ export default function Navbar() {
 
       {/* ✅ MOBILE DRAWER (FIXED + ANIMATED) */}
       <div
-        className={`fixed inset-0 z-[999] md:hidden transition-all duration-300 ${
+        className={`fixed inset-0 z-[998] md:hidden transition-all duration-300 ${
           open ? "pointer-events-auto" : "pointer-events-none"
         }`}
       >
@@ -79,14 +80,14 @@ export default function Navbar() {
         {/* OVERLAY */}
         <div
           onClick={() => setOpen(false)}
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 will-change-opacity ${
             open ? "opacity-100" : "opacity-0"
           }`}
         />
 
         {/* DRAWER */}
         <div
-          className={`absolute right-0 top-0 h-full w-72 bg-white p-5 shadow-xl z-[1000] transform transition-transform duration-300 ${
+          className={`absolute right-0 top-0 h-full w-72 bg-white p-5 shadow-xl z-[999] transform transition-transform duration-300 will-change-transform ${
             open ? "translate-x-0" : "translate-x-full"
           }`}
         >

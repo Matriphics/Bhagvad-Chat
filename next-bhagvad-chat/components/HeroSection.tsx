@@ -28,14 +28,15 @@ export default function HeroSection() {
         {images.map((img, i) => (
           <div
             key={img}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              i === index ? "opacity-100 z-10" : "opacity-0"
+            className={`absolute inset-0 transition-opacity duration-1000 will-change-opacity ${
+              i === index ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
           >
             <Image
               src={img}
               alt=""
               fill
+              priority={i === index}
               className="object-cover object-top"
             />
           </div>
